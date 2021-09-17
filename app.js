@@ -11,8 +11,9 @@ app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
 
-    var today = new Date();
-    var currentDay = today.getDay();
+    let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    let today = new Date();
+    let currentDay = today.getDay();
     let day = "";
 
     if(currentDay === 6 || currentDay === 0) {
@@ -22,7 +23,7 @@ app.get("/", (req, res) => {
         day = "Weekday";
     }
 
-    res.render('list', {dayType: day});
+    res.render('list', {dayType: days[currentDay]});
 });
 
 
