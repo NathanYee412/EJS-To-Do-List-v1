@@ -7,23 +7,29 @@ const app = express();
 // set view engine to use ejs
 app.set("view engine", "ejs");
 
+app.use(express.json());
+app.use(express.urlencoded());
 
 
 app.get("/", (req, res) => {
 
-    let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    let options = { 
+        weekday: 'long',
+        day: 'numeric',
+        month: "long"
+    };
+
     let today = new Date();
-    let currentDay = today.getDay();
-    let day = "";
 
-    if(currentDay === 6 || currentDay === 0) {
-        day = "Weekend";
+    let day = today.toLocaleDateString("en-US", options);
 
-    } else {
-        day = "Weekday";
-    }
+    const listItem = String(req.body.listItem);
 
-    res.render('list', {dayType: days[currentDay]});
+    console.log(listItem);
+
+
+    
+    res.render('list', {dayType: day});
 });
 
 

@@ -6,13 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
 </head>
-<body>
+    <body>
 
-    <% if(dayType === "Saturday" || dayType === "Sunday") { %>
-        <h1 style="color: aquamarine;"><%=dayType%> List</h1>
-    <% } else { %>
-        <h1 style="color: blue;"><%=dayType%> List</h1>
-    <% } %>
+        <h1><%=dayType%></h1>
     
-</body>
+        <ul>
+            <li>Buy Food</li>
+            <li>Buy eat</li>
+            <li>Buy Food</li>
+        </ul>
+
+        <form class="" action="/" method="post">
+            <input type="text" name="newItem" placeholder="Enter To-Do Item">
+            <button type="submit" name="button">Add</button>
+        </form>
+
+    </body>
 </html>
