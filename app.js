@@ -3,12 +3,14 @@ const bodyParser = require("body-parser");
 
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
 
 // set view engine to use ejs
 app.set("view engine", "ejs");
 
-app.use(express.json());
-app.use(express.urlencoded());
+
+var items = [];
 
 
 app.get("/", (req, res) => {
@@ -23,15 +25,19 @@ app.get("/", (req, res) => {
 
     let day = today.toLocaleDateString("en-US", options);
 
-    const listItem = String(req.body.listItem);
-
-    console.log(listItem);
-
-
     
-    res.render('list', {dayType: day});
+    
+    res.render('list', {dayType: day, newListItem: items});
 });
 
+
+app.post("/", (req, res) => {
+
+    items.push(req.body.newItem);
+
+    res.redirect("/");
+
+});
 
 
 app.listen(3000, () => {
