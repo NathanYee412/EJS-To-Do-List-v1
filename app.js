@@ -30,15 +30,10 @@ app.post("/", (req, res) => {
         let item = req.body.newItem; 
         workItems.push(item);
         res.redirect("/work");
-
-        console.log(workItems);
     } else {
         items.push(req.body.newItem);
         res.redirect("/");
     }
-
-
-    
 
 });
 

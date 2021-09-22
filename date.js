@@ -1,8 +1,6 @@
 //jshint esversion:6
 
-module.exports.getDate = getDate;
-
-function getDate(){
+exports.getDate = function() {
 
     let options = { 
         weekday: 'long',
@@ -12,14 +10,11 @@ function getDate(){
     
     let today = new Date();
     
-    let day = today.toLocaleDateString("en-US", options);
+    return today.toLocaleDateString("en-US", options);
     
-    return day;
 }
 
-module.exports.getDay = getDay;
-
-function getDay(){
+exports.getDay = function() {
 
     let options = { 
         weekday: 'long',
@@ -27,9 +22,44 @@ function getDay(){
     
     let today = new Date();
     
-    let day = today.toLocaleDateString("en-US", options);
-    
-    return day;
+    return today.toLocaleDateString("en-US", options);
+
 }
+
+
+
+// long hand version below 
+
+// module.exports.getDate = getDate;
+
+// function getDate(){
+
+//     let options = { 
+//         weekday: 'long',
+//         day: 'numeric',
+//         month: "long"
+//     };
+    
+//     let today = new Date();
+    
+//     let day = today.toLocaleDateString("en-US", options);
+    
+//     return day;
+// }
+
+// module.exports.getDay = getDay;
+
+// function getDay(){
+
+//     let options = { 
+//         weekday: 'long',
+//     };
+    
+//     let today = new Date();
+    
+//     let day = today.toLocaleDateString("en-US", options);
+    
+//     return day;
+// }
 
 
