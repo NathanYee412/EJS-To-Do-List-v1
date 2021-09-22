@@ -10,8 +10,8 @@ app.use(express.static(__dirname + '/public')); //Serves resources from public f
 app.set("view engine", "ejs");
 
 
-var items = [];
-
+let items = [];
+let workItems = []; 
 
 app.get("/", (req, res) => {
 
@@ -26,17 +26,37 @@ app.get("/", (req, res) => {
     let day = today.toLocaleDateString("en-US", options);
 
     
-    
-    res.render('list', {dayType: day, newListItems: items});
+    res.render('list', {listTitle: day, newListItems: items});
 });
 
 
 app.post("/", (req, res) => {
 
-    items.push(req.body.newItem);
+    if(req.body.list === "Work") {
+        let item = req.body.newItem; 
+        workItems.push(item);
+        res.redirect("/work");
 
-    res.redirect("/");
+        console.log(workItems);
+    } else {
+        items.push(req.body.newItem);
+        res.redirect("/");
+    }
 
+
+    
+
+});
+
+
+app.get("/work", (req, res) => {
+    res.render("list", {listTitle: "Work List", newListItems: workItems});
+});
+
+app.post("/work", (req, res) => {
+    let item = req.body.workItem; 
+    workItems.push(item);
+    res.redirect("/work");
 });
 
 

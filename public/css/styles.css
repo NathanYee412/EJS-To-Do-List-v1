@@ -5,6 +5,11 @@ html {
   font-family: 'helvetica neue', sans-serif;
 }
 
+a {
+  color: white;
+  padding: 0px 30px;
+}
+
 h1 {
   color: #fff;
   padding: 10px;
