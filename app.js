@@ -48,6 +48,15 @@ const defaultItem3 = new itemModel({
 // default item array
 const defaults = [defaultItem1, defaultItem2, defaultItem3];
 
+// custom route schema and model
+const listSchema = {
+    name: String,
+    items: [itemsSchema]
+};
+
+const List = mongoose.model("List", listSchema);
+
+
 
 // printing items to console that are in mongoose
 itemModel.find({}, (err, items)=>{
@@ -113,6 +122,38 @@ app.post("/", (req, res) => {
 
 });
 
+// using custom route parameters to create new lists 
+app.get("/:customListName", (req, res) =>{
+    const customListName = req.params.customListName;
+
+    List.find({name: customListName}, (err, foundList) =>{
+        if(!err) {
+            if(!foundList) {
+                // create new list
+                const list = new List({
+                    name: customListName,
+                    items: defaults
+                });
+            
+                list.save();
+                res.redirect("/" + customListName);
+            } else {
+                // show an existing list
+                res.render('list', {listTitle: customListName, newListItems: foundList});
+            }
+        }
+    });
+
+    const list = new List({
+        name: customListName,
+        items: defaults
+    });
+
+    list.save();
+
+
+});
+
 // delete an item based on item _id
 app.post("/delete", (req, res) => {
     const checkedItemId = req.body.checkbox;
@@ -125,6 +166,8 @@ app.post("/delete", (req, res) => {
         }
     });
 });
+
+
 
 
 app.get("/work", (req, res) => {
