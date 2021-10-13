@@ -1,11 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const { compile } = require("ejs");
+const _ = require('lodash');
 
 const app = express();
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
+
 app.use(express.static(__dirname + '/public')); //Serves resources from public folder
 app.set("view engine", "ejs"); // set view engine to use ejs
 
@@ -20,10 +22,7 @@ mongoose.connect("mongodb://localhost:27017/todolistDB");
 
 // create database items schema 
 const itemsSchema = mongoose.Schema({
-    itemName: {
-        type: String,
-        required: [true, "Please enter an item name"]
-    }
+    itemName: String
 });
 
 // creating a mongoose model 
@@ -59,16 +58,16 @@ const List = mongoose.model("List", listSchema);
 
 
 // printing items to console that are in mongoose
-itemModel.find({}, (err, items)=>{
-    if(err) {
-        console.log(err);
-    } else {
-        console.log(items);
-        items.forEach((item) =>{
-            console.log(item.itemName);
-        });
-    }
-});
+// itemModel.find({}, (err, items)=>{
+//     if(err) {
+//         console.log(err);
+//     } else {
+//         console.log(items);
+//         items.forEach((item) =>{
+//             console.log(item.itemName);
+//         });
+//     }
+// });
 
 //------------------------------------------------------------------------------------------------
 // End of Mongoose setup
@@ -82,26 +81,23 @@ itemModel.find({}, (err, items)=>{
 app.get("/", (req, res) => {
 
     itemModel.find({}, (err, foundItems) => {
-        if(err){
-            console.log(err);
-        } else{
 
-            // checking if found items is zero then inserting the defaults if it is
-            if(foundItems.length === 0) {
-                itemModel.insertMany(defaults, (err) => {
-                    if(err){
-                        console.log(err);
-                    } else{
-                        console.log("successfully inserted the default documents");
-                    }
-                });
+        // checking if found items is zero then inserting the defaults if it is
+        if(foundItems.length === 0) {
+            itemModel.insertMany(defaults, (err) => {
+                if(err){
+                    console.log(err);
+                } else{
+                    console.log("successfully inserted the default documents");
+                }
+            });
 
-                // redirect after default items are inserted
-                res.redirect("/");
-            } else {
-                res.render('list', {listTitle: "Today", newListItems: foundItems});
-            }            
-        }
+            // redirect after default items are inserted
+            res.redirect("/");
+        } else {
+            res.render('list', {listTitle: "Today", newListItems: foundItems});
+        }            
+        
     });
 
 });
@@ -133,9 +129,9 @@ app.post("/", (req, res) => {
 
 // using custom route parameters to create new lists 
 app.get("/:customListName", (req, res) =>{
-    const customListName = req.params.customListName;
+    const customListName = _.capitalize(req.params.customListName);
 
-    List.find({name: customListName}, (err, foundList) =>{
+    List.findOne({name: customListName}, (err, foundList) =>{
         if(!err) {
             if(!foundList) {
                 // create new list
@@ -143,12 +139,11 @@ app.get("/:customListName", (req, res) =>{
                     name: customListName,
                     items: defaults
                 });
-            
                 list.save();
                 res.redirect("/" + customListName);
             } else {
                 // show an existing list
-                res.render('list', {listTitle: customListName, newListItems: foundList});
+                res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
             }
         }
     });
@@ -176,11 +171,13 @@ app.post("/delete", (req, res) => {
             } 
         });
     } else {
-        List.findByIdAndUpdate(
+        List.findOneAndUpdate(
             {name: listName},
-            {$pull: {items}},
-            () =>{
-
+            {$pull: {items: {_id: checkedItemId}}},
+            (err, foundList) =>{
+                if(!err) {
+                    res.redirect("/" + listName);
+                }
 
         });
     }
