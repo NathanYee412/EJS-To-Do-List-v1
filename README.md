@@ -6,6 +6,6 @@ A To-Do list build with Node.js, EJS, and MongoDB.
 2. Clone this git repository
 3. Open your command prompt go to the project directory.
 4. run 'npm install' to download all of the dependencies
-5. run 'npm /app.js'
+5. run 'node /app.js'
 6. Open an internet brower and head to http://localhost:3000/
 7. Use the app.
