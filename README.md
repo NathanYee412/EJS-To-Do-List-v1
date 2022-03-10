@@ -5,7 +5,7 @@ A To-Do list build with Node.js, EJS, and MongoDB.
 - Node.js
 - mongoDB
 
-### How to run the project
+### How to run
 1. Have Node.js and npm installed.
 2. Clone this git repository
 3. Open your command prompt go to the project directory.
